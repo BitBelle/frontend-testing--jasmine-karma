@@ -1,0 +1,36 @@
+<div class="reg-container">
+    <h3>User Registration</h3>
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="signupForm">
+
+        <div class="form-Grp">
+            <label for="userName">Username</label>
+            <input type="text" formControlName="UserName">
+        </div>
+
+        <div class="form-Grp">
+            <label for="email">Email</label>
+            <input type="text" formControlName="Email">
+        </div>
+
+        <div class="form-Grp">
+            <label for="password">Password</label>
+            <input type="text" formControlName="Password">
+        </div>
+
+        <div class="form-Grp">
+            <label for="password">Confirm Password</label>
+            <input type="text" formControlName="ConfirmPassword">
+
+            <!-- Error mssg for pswd mismatch -->
+             <div *ngIf="signupForm.errors?.['passwordMismatch'] && signupForm.get('ConfirmPassword')?.touched">
+                Passwords dont match!
+             </div>
+        </div>
+
+        <button type="submit" [disabled]="!signupForm.valid">Register</button>
+    </form>
+
+    
+
+</div>

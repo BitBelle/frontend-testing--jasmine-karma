@@ -1,0 +1,8 @@
+<header class="nav-bar">
+    <nav>
+        <ul>
+            <li><a routerLink="/register" routerLinkActive="active" *ngIf="!isLoggedIn" class="nav-link">Register</a></li>
+            <li><a routerLink="/login" routerLinkActive="active" *ngIf="!isLoggedIn" class="nav-link">Login</a></li>
+        </ul>
+    </nav>
+</header>

@@ -1,0 +1,21 @@
+<div class="reg-container">
+    <h3>Login</h3>
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+
+        <div class="form-Grp">
+            <label for="email">Email</label>
+            <input type="text" formControlName="Email">
+        </div>
+
+        <div class="form-Grp">
+            <label for="password">Password</label>
+            <input type="text" formControlName="Password">
+        </div>
+
+        <button type="submit" [disabled]="!loginForm.valid">Login</button>
+    </form>
+
+    
+
+</div>
