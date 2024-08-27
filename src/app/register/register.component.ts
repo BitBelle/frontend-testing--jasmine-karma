@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
       Password: ['', [Validators.required,
       Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$')
       ]],
-      ConfirmPassword: ['', Validators.required]
+      ConfirmPassword: ['', [Validators.required]]
     }, { validator: this.passwordMatchValidator })
   }
 

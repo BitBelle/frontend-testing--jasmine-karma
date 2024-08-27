@@ -1,26 +1,33 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { RegisterComponent } from './register.component';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { of } from 'rxjs';
+
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let router: Router;
 
+  // Arrange
   beforeEach(async () => {
-    const spy = jasmine.createSpyObj('Router', ['navigate']);
-
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [RegisterComponent],
-      providers: [{ provide: Router, useValue: spy }]
+      imports: [
+        RegisterComponent,
+        ReactiveFormsModule,
+        RouterModule
+      ],
+      providers: [
+        { provide: ActivatedRoute, useValue: { queryParams: of({}) } },
+        { provide: Router, useValue: { navigate: jasmine.createSpy('navigate') } }
+      ]
     })
     .compileComponents();
 
-    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    router = TestBed.inject(Router);
   });
 
   beforeEach(() => {
@@ -29,14 +36,18 @@ describe('RegisterComponent', () => {
     fixture.detectChanges();
   });
 
+
+  // Act
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 
   it('should have an invalid form initially', () => {
     const form = component.signupForm;
     expect(form.valid).toBeFalsy();
   });
+
 
   it('should validate form fields', () => {
     const form = component.signupForm;
@@ -48,27 +59,39 @@ describe('RegisterComponent', () => {
     expect(form.valid).toBeTruthy();
   });
 
+
   it('should show error message if passwords do not match', () => {
     component.signupForm.controls['Password'].setValue('Password1');
     component.signupForm.controls['ConfirmPassword'].setValue('Password2');
     fixture.detectChanges();
     
-    const errorMsg: DebugElement = fixture.debugElement.query(By.css('div'));
+    const errorMsg: DebugElement = fixture.debugElement.query(By.css('div.error'));
     expect(errorMsg.nativeElement.textContent).toContain('Passwords dont match!');
   });
+
 
   it('should save form data to local storage on submit', () => {
     spyOn(localStorage, 'setItem');
     
+
+    // setting form values
     component.signupForm.controls['UserName'].setValue('TestUser');
     component.signupForm.controls['Email'].setValue('test@example.com');
     component.signupForm.controls['Password'].setValue('Password1');
     component.signupForm.controls['ConfirmPassword'].setValue('Password1');
     
+    // submitting the form
     component.onSubmit();
 
-    expect(localStorage.setItem).toHaveBeenCalledWith('RegData', JSON.stringify(component.signupForm.value));
+    // checking localStorage.setItem was called with the correct data
+    expect(localStorage.setItem).toHaveBeenCalledWith('RegData', JSON.stringify({
+      UserName: 'TestUser',
+      Email: 'test@example.com',
+      Password: 'Password1',
+      ConfirmPassword: 'Password1' 
+    }));
   });
+
 
   it('should navigate to login page on successful submit', () => {
     component.signupForm.controls['UserName'].setValue('TestUser');
@@ -78,6 +101,6 @@ describe('RegisterComponent', () => {
 
     component.onSubmit();
 
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 });

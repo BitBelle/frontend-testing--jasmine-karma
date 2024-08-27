@@ -3,6 +3,8 @@
         <ul>
             <li><a routerLink="/register" routerLinkActive="active" *ngIf="!isLoggedIn" class="nav-link">Register</a></li>
             <li><a routerLink="/login" routerLinkActive="active" *ngIf="!isLoggedIn" class="nav-link">Login</a></li>
+            <a *ngIf="isLoggedIn" routerLink="/profile">{{ currentUser?.UserName }}</a>
+            <!-- <a *ngIf="isLoggedIn" (click)="logout()">Logout</a> -->
         </ul>
     </nav>
 </header>

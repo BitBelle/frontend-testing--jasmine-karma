@@ -23,7 +23,7 @@
             <input type="text" formControlName="ConfirmPassword">
 
             <!-- Error mssg for pswd mismatch -->
-             <div *ngIf="signupForm.errors?.['passwordMismatch'] && signupForm.get('ConfirmPassword')?.touched">
+             <div class="error" *ngIf="signupForm.errors?.['passwordMismatch'] && signupForm.get('ConfirmPassword')?.touched">
                 Passwords dont match!
              </div>
         </div>
